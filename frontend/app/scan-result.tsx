@@ -16,9 +16,9 @@ import { SpecList } from '../src/components/SpecList';
 import { Timeline } from '../src/components/Timeline';
 import { Button } from '../src/components/Button';
 import { ScanResponseData, TwinView, LimitedTwinView } from '../src/types/api';
-import { colors } from '../theme/colors';
-import { spacing, borderRadius } from '../theme/spacing';
-import { typography } from '../theme/typography';
+import { colors } from '../src/theme/colors';
+import { spacing, borderRadius } from '../src/theme/spacing';
+import { typography } from '../src/theme/typography';
 import { formatCurrency, formatDateTime } from '../src/utils/format';
 import { retailerApi } from '../src/api/retailer';
 
