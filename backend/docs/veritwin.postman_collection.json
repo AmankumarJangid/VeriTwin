@@ -1,0 +1,248 @@
+{
+  "info": {
+    "name": "VeriTwin REST API",
+    "_postman_id": "c1f7b8e3-0d5e-4b47-a92c-5b2069b2d881",
+    "description": "Complete collection for VeriTwin Product Authentication & Digital Twin System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000/api", "type": "string" },
+    { "key": "mfrToken", "value": "", "type": "string" },
+    { "key": "retailToken", "value": "", "type": "string" },
+    { "key": "consumerToken", "value": "", "type": "string" },
+    { "key": "currentTwinId", "value": "", "type": "string" },
+    { "key": "currentTransferQr", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "0. Health",
+      "item": [
+        {
+          "name": "GET Health Check",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Auth",
+      "item": [
+        {
+          "name": "POST Register (Consumer)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Demo User\",\n  \"email\": \"demo@example.com\",\n  \"password\": \"Demo@1234\",\n  \"role\": \"CONSUMER\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "POST Login (Manufacturer)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.tokens) {",
+                  "  pm.collectionVariables.set('mfrToken', json.data.tokens.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"maker@veritwin.dev\",\n  \"password\": \"Maker@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "POST Login (Retailer)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.tokens) {",
+                  "  pm.collectionVariables.set('retailToken', json.data.tokens.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"retail@veritwin.dev\",\n  \"password\": \"Retail@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "POST Login (Consumer - Riya)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.tokens) {",
+                  "  pm.collectionVariables.set('consumerToken', json.data.tokens.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"riya@veritwin.dev\",\n  \"password\": \"Riya@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "GET Auth Me",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{mfrToken}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Manufacturer",
+      "item": [
+        {
+          "name": "GET Products",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{mfrToken}}" }],
+            "url": { "raw": "{{baseUrl}}/manufacturer/products", "host": ["{{baseUrl}}"], "path": ["manufacturer", "products"] }
+          }
+        },
+        {
+          "name": "GET Batches",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{mfrToken}}" }],
+            "url": { "raw": "{{baseUrl}}/manufacturer/batches", "host": ["{{baseUrl}}"], "path": ["manufacturer", "batches"] }
+          }
+        },
+        {
+          "name": "GET Retailers List",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{mfrToken}}" }],
+            "url": { "raw": "{{baseUrl}}/manufacturer/retailers", "host": ["{{baseUrl}}"], "path": ["manufacturer", "retailers"] }
+          }
+        },
+        {
+          "name": "GET Twins List",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{mfrToken}}" }],
+            "url": { "raw": "{{baseUrl}}/manufacturer/twins", "host": ["{{baseUrl}}"], "path": ["manufacturer", "twins"] }
+          }
+        },
+        {
+          "name": "GET Analytics Overview",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{mfrToken}}" }],
+            "url": { "raw": "{{baseUrl}}/manufacturer/analytics/overview?days=30", "host": ["{{baseUrl}}"], "path": ["manufacturer", "analytics", "overview"], "query": [{ "key": "days", "value": "30" }] }
+          }
+        },
+        {
+          "name": "GET Audit Feed",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{mfrToken}}" }],
+            "url": { "raw": "{{baseUrl}}/manufacturer/audit", "host": ["{{baseUrl}}"], "path": ["manufacturer", "audit"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Retailer",
+      "item": [
+        {
+          "name": "GET Retailer Inventory",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{retailToken}}" }],
+            "url": { "raw": "{{baseUrl}}/retailer/inventory", "host": ["{{baseUrl}}"], "path": ["retailer", "inventory"] }
+          }
+        },
+        {
+          "name": "GET Lookup Consumer",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{retailToken}}" }],
+            "url": { "raw": "{{baseUrl}}/retailer/consumers/lookup?email=riya@veritwin.dev", "host": ["{{baseUrl}}"], "path": ["retailer", "consumers", "lookup"], "query": [{ "key": "email", "value": "riya@veritwin.dev" }] }
+          }
+        },
+        {
+          "name": "GET Retailer Sales",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{retailToken}}" }],
+            "url": { "raw": "{{baseUrl}}/retailer/sales", "host": ["{{baseUrl}}"], "path": ["retailer", "sales"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Consumer",
+      "item": [
+        {
+          "name": "GET Vault (Owned Twins)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{consumerToken}}" }],
+            "url": { "raw": "{{baseUrl}}/consumer/vault", "host": ["{{baseUrl}}"], "path": ["consumer", "vault"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Scanning",
+      "item": [
+        {
+          "name": "POST Scan QR (Fallback Verification)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{consumerToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"qr_payload\": \"VT1.sample.payload\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/products/scan-qr", "host": ["{{baseUrl}}"], "path": ["products", "scan-qr"] }
+          }
+        }
+      ]
+    }
+  ]
+}
