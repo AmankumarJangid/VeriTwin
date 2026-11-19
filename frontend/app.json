@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "VeriTwin",
+    "slug": "veritwin",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "veritwin",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f5f1ec"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "VeriTwin uses the camera to verify products.",
+        "NSPhotoLibraryAddUsageDescription": "Save generated logos and QR codes."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundColor": "#f5f1ec"
+      },
+      "permissions": [
+        "CAMERA",
+        "READ_MEDIA_IMAGES"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "VeriTwin uses the camera to verify products."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Save generated logos and QR codes.",
+          "savePhotosPermission": "Save generated logos and QR codes."
+        }
+      ],
+      "expo-asset",
+      "expo-font"
+    ]
+  }
+}
